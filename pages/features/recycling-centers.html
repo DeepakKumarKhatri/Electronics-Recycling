@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recycling Centers Locator - EcoTech Recycle</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/home/recycling-centers.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">EcoTech Recycle</div>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="pages/about-us.html">About Us</a></li>
+                <li><a href="pages/recycling-guide.html">Recycling Guide</a></li>
+                <li><a href="pages/feedback/index.html">Feedback</a></li>
+                <li><a href="pages/auth.html">Login</a></li>
+
+            </ul>
+        </nav>
+    </header>
+
+    <main class="recycling-centers-container">
+        <h1>Find Recycling Centers Near You</h1>
+        <p>Locate the nearest electronics recycling centers in your area.</p>
+
+        <div class="search-container">
+            <input type="text" id="locationInput" placeholder="Enter your zip code or city">
+            <button id="searchButton">Search</button>
+        </div>
+
+        <div id="map" class="map-container"></div>
+
+        <div id="centersList" class="centers-list">
+            <!-- Centers will be dynamically added here -->
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="recycling-guide.html">Recycling Guide</a></li>
+                    <li><a href="pickup-request.html">Request Pickup</a></li>
+                    <li><a href="recycling-centers.html">Recycling Centers</a></li>
+                    <li><a href="rewards-program.html">Rewards Program</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>Email: info@ecotechrecycle.com</p>
+                <p>Phone: (555) 123-4567</p>
+            </div>
+            <div class="footer-section">
+                <h4>Follow Us</h4>
+                <div class="social-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 EcoTech Recycle. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/recycling-centers.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAyRRTC3iu83e7tl_KDBwEiXBg7oSQQfzY&callback=initMap" async defer></script>
+</body>
+</html>
