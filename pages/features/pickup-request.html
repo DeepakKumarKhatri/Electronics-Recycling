@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Pickup - EcoTech Recycle</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/home/pickup-request.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">EcoTech Recycle</div>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="pages/about-us.html">About Us</a></li>
+                <li><a href="pages/recycling-guide.html">Recycling Guide</a></li>
+                <li><a href="pages/feedback/index.html">Feedback</a></li>
+                <li><a href="pages/auth.html">Login</a></li>
+
+            </ul>
+        </nav>
+    </header>
+
+    <main class="pickup-request-container">
+        <h1>Request Electronics Pickup</h1>
+        <p>Schedule a convenient time for us to collect your recyclable electronics.</p>
+
+        <form id="pickupRequestForm" class="pickup-form">
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Pickup Address:</label>
+                <textarea id="address" name="address" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="pickup-date">Preferred Pickup Date:</label>
+                <input type="date" id="pickup-date" name="pickup-date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="pickup-time">Preferred Pickup Time:</label>
+                <select id="pickup-time" name="pickup-time" required>
+                    <option value="">Select a time</option>
+                    <option value="morning">Morning (9am - 12pm)</option>
+                    <option value="afternoon">Afternoon (1pm - 5pm)</option>
+                    <option value="evening">Evening (6pm - 8pm)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="items">Items for Pickup:</label>
+                <textarea id="items" name="items" rows="4" placeholder="Please list the items you want to recycle (e.g., 2 laptops, 1 printer, 3 smartphones)" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="special-instructions">Special Instructions (Optional):</label>
+                <textarea id="special-instructions" name="special-instructions" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Schedule Pickup</button>
+        </form>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="recycling-guide.html">Recycling Guide</a></li>
+                    <li><a href="pickup-request.html">Request Pickup</a></li>
+                    <li><a href="recycling-centers.html">Recycling Centers</a></li>
+                    <li><a href="rewards-program.html">Rewards Program</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>Email: info@ecotechrecycle.com</p>
+                <p>Phone: (555) 123-4567</p>
+            </div>
+            <div class="footer-section">
+                <h4>Follow Us</h4>
+                <div class="social-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 EcoTech Recycle. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/pickup-request.js"></script>
+</body>
+</html>
