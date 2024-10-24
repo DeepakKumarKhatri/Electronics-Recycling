@@ -30,15 +30,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        // Here you would typically send the login data to a server
-        console.log('Login submitted');
-        alert('Login functionality will be implemented in the future.');
+        const email = document.getElementById('loginEmail').value;
+        // console.log(email)
+
+        // Check the email domain
+        if (email.endsWith('@admin.com')) {
+            // console.log("1")
+            // Redirect to admin dashboard
+            window.location.href = '/pages/admin-dashboard/index.html';
+        } else {
+            // console.log("2")
+            // Redirect to user dashboard
+            window.location.href = '/pages/user-dashboard/index.html';
+        }
     });
 
     registerForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        // Here you would typically send the registration data to a server
-        console.log('Registration submitted');
-        alert('Registration functionality will be implemented in the future.');
+        // Redirect to user dashboard
+        window.location.href = '/pages/user-dashboard/index.html';
     });
 });
