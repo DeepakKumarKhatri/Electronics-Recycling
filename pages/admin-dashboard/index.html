@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - EcoTech Recycle</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>EcoTech Recycle</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> Users</a></li>
+                    <li><a href="#"><i class="fas fa-truck"></i> Pickups</a></li>
+                    <li><a href="#"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="dashboard-main">
+            <header class="dashboard-header">
+                <h1>Admin Dashboard</h1>
+                <div class="user-info">
+                    <span>Welcome, Admin</span>
+                    <img src="../assets/images/admin-avatar.jpg" alt="Admin Avatar" class="user-avatar">
+                </div>
+            </header>
+            <div class="dashboard-content">
+                <section class="dashboard-summary">
+                    <div class="summary-card">
+                        <h3>Total Users</h3>
+                        <p class="summary-value">1,250</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Recycled</h3>
+                        <p class="summary-value">25,000 kg</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Pending Pickups</h3>
+                        <p class="summary-value">42</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Monthly Revenue</h3>
+                        <p class="summary-value">$15,000</p>
+                    </div>
+                </section>
+                <section class="dashboard-charts">
+                    <div class="chart-container">
+                        <h3>Monthly Recycling Trends</h3>
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>User Growth</h3>
+                        <canvas id="userGrowthChart"></canvas>
+                    </div>
+                </section>
+                <section class="recent-activity">
+                    <h3>Recent Activity</h3>
+                    <ul class="activity-list">
+                        <li>
+                            <span class="activity-date">May 5, 2024</span>
+                            <span class="activity-description">New user registered: Jane Smith</span>
+                        </li>
+                        <li>
+                            <span class="activity-date">May 4, 2024</span>
+                            <span class="activity-description">Pickup completed: 500kg of electronics</span>
+                        </li>
+                        <li>
+                            <span class="activity-date">May 3, 2024</span>
+                            <span class="activity-description">Report generated: April 2024 Summary</span>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="../js/main.js"></script>
+    <script src="../js/admin-dashboard.js"></script>
+</body>
+</html>
