@@ -52,19 +52,3 @@ document.addEventListener("DOMContentLoaded", function() {
         sidebar.classList.toggle('active');
     });
 });
-
-document.addEventListener("DOMContentLoaded", function () {
-    const avatar = document.getElementById("userAvatar");
-    const dropdown = document.getElementById("userDropdown");
-
-    avatar.addEventListener("click", function () {
-        dropdown.classList.toggle("show");
-    });
-
-    // Close the dropdown when clicking outside
-    document.addEventListener("click", function (event) {
-        if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
-            dropdown.classList.remove("show");
-        }
-    });
-});

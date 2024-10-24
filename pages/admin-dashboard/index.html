@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - EcoTech Recycle</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/responsive.css">
-    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/dashboards/style.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -27,10 +28,14 @@
         </aside>
         <main class="dashboard-main">
             <header class="dashboard-header">
-                <h1>Admin Dashboard</h1>
+                <h1>Dashboard</h1>
                 <div class="user-info">
                     <span>Welcome, Admin</span>
-                    <img src="../assets/images/admin-avatar.jpg" alt="Admin Avatar" class="user-avatar">
+                    <img src="../../assets/images/demo_user.png" alt="Admin Avatar" class="user-avatar" id="userAvatar">
+                    <div class="dropdown-menu" id="userDropdown">
+                        <a href="#" id="profileLink">Profile</a>
+                        <a href="#" id="logoutLink">Logout</a>
+                    </div>                
                 </div>
             </header>
             <div class="dashboard-content">
@@ -82,7 +87,8 @@
             </div>
         </main>
     </div>
-    <script src="../js/main.js"></script>
-    <script src="../js/admin-dashboard.js"></script>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/admin-dashboard.js"></script>
+    <script src="../../js/utils/helper.js"></script>
 </body>
 </html>
