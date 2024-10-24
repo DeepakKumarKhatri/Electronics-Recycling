@@ -13,17 +13,17 @@
 <body>
     <header>
         <nav>
-            <div class="logo">EcoTech Recycle</div>
+            <a class="logo" href="/index.html">EcoTech Recycle</a>
             <button class="menu-toggle" aria-label="Toggle menu">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
             <ul class="nav-links">
-                <li><a href="pages/about-us.html">About Us</a></li>
-                <li><a href="pages/recycling-guide.html">Recycling Guide</a></li>
-                <li><a href="pages/feedback/index.html">Feedback</a></li>
-                <li><a href="pages/auth.html">Login</a></li>
+                <li><a href="../../pages/features/about-us.html">About Us</a></li>
+                <li><a href="../../pages/features/recycling-guide.html">Recycling Guide</a></li>
+                <li><a href="../../pages/feedback/index.html">Feedback</a></li>
+                <li><a href="../../pages/auth/index.html">Login</a></li>
             </ul>
         </nav>
     </header>
@@ -31,6 +31,7 @@
     <main class="article-container">
         <article>
             <header class="article-header">
+                <button class="go-back-button" id="goBackButton">Go back</button>
                 <h1>The Importance of E-Waste Recycling in the Digital Age</h1>
                 <div class="article-meta">
                     <span class="author">By Sarah Johnson</span>
@@ -116,37 +117,10 @@
         </section>
     </main>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="recycling-guide.html">Recycling Guide</a></li>
-                    <li><a href="pickup-request.html">Request Pickup</a></li>
-                    <li><a href="recycling-centers.html">Recycling Centers</a></li>
-                    <li><a href="rewards-program.html">Rewards Program</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Contact Us</h4>
-                <p>Email: info@ecotechrecycle.com</p>
-                <p>Phone: (555) 123-4567</p>
-            </div>
-            <div class="footer-section">
-                <h4>Follow Us</h4>
-                <div class="social-icons">
-                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 EcoTech Recycle. All rights reserved.</p>
-        </div>
-    </footer>
+    <div id="footer-placeholder"></div>
 
     <script src="../../js/main.js"></script>
     <script src="../../js/article.js"></script>
+    <script src="../../js/feedback.js" type="module"></script>
 </body>
 </html>
