@@ -1,3 +1,5 @@
+import LoadComponent from "./utils/helper.js";
+
 document.addEventListener('DOMContentLoaded', () => {
     const calculatorForm = document.getElementById('calculatorForm');
     const results = document.getElementById('results');
@@ -38,3 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
         results.classList.remove('hidden');
     }
 });
+
+LoadComponent('../components/header.html', 'header-placeholder');
+LoadComponent('../components/footer.html', 'footer-placeholder');

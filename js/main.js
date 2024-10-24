@@ -29,4 +29,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 3000); // Change every 3 seconds
 });
 
+function loadComponent(file, elementId) {
+    fetch(file)
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById(elementId).innerHTML = data;
+        })
+        .catch(error => console.error('Error loading component:', error));
+}
 
+// Load the header and footer
+loadComponent('../pages/components/header.html', 'header-placeholder');
+loadComponent('../pages/components/footer.html', 'footer-placeholder');

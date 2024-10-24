@@ -1,3 +1,5 @@
+import LoadComponent from "./utils/helper.js";
+
 document.addEventListener('DOMContentLoaded', () => {
     const redeemButtons = document.querySelectorAll('.redeem-btn');
 
@@ -22,3 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+LoadComponent('../components/header.html', 'header-placeholder');
+LoadComponent('../components/footer.html', 'footer-placeholder');

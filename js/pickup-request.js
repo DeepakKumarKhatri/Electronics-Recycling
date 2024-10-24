@@ -1,3 +1,5 @@
+import LoadComponent from "./utils/helper.js";
+
 document.addEventListener('DOMContentLoaded', () => {
     const pickupRequestForm = document.getElementById('pickupRequestForm');
 
@@ -56,3 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tomorrow.setDate(tomorrow.getDate() + 1);
     pickupDateInput.min = tomorrow.toISOString().split('T')[0];
 });
+
+LoadComponent('../components/header.html', 'header-placeholder');
+LoadComponent('../components/footer.html', 'footer-placeholder');

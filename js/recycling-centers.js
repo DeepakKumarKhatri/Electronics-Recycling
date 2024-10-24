@@ -1,3 +1,5 @@
+import LoadComponent from "./utils/helper.js";
+
 let map;
 let markers = [];
 
@@ -7,6 +9,8 @@ function initMap() {
         zoom: 10
     });
 }
+
+window.initMap = initMap;
 
 document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.getElementById('searchButton');
@@ -69,3 +73,6 @@ function displayRecyclingCenters(centers) {
     markers.forEach(marker => bounds.extend(marker.getPosition()));
     map.fitBounds(bounds);
 }
+
+LoadComponent('../components/header.html', 'header-placeholder');
+LoadComponent('../components/footer.html', 'footer-placeholder');
