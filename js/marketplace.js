@@ -42,8 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Form submission
     sellForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        // Here you would typically send the form data to your server
-        // For this example, we'll just show an alert
         alert('Item listed successfully!');
         sellModal.style.display = "none";
         sellForm.reset();

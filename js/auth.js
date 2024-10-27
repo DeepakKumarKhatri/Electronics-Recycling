@@ -31,15 +31,12 @@ document.addEventListener('DOMContentLoaded', () => {
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const email = document.getElementById('loginEmail').value;
-        // console.log(email)
 
         // Check the email domain
         if (email.endsWith('@admin.com')) {
-            // console.log("1")
             // Redirect to admin dashboard
             window.location.href = '/pages/admin-dashboard/index.html';
         } else {
-            // console.log("2")
             // Redirect to user dashboard
             window.location.href = '/pages/user-dashboard/index.html';
         }
