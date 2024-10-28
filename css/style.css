@@ -293,3 +293,93 @@ footer {
     display: flex;
     justify-content: space-between;
 }
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #222;
+    color: var(--white);
+    transition: height 0.3s ease-in-out;
+    height: 0vh;
+    overflow: hidden;
+}
+
+.footer-content {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+footer.expanded {
+    height: 50vh;
+    overflow-y: auto;
+}
+
+footer.expanded .footer-content {
+    opacity: 1;
+}
+
+.footer-section {
+    margin-bottom: 1rem;
+}
+
+.footer-section h4 {
+    margin-bottom: 0.5rem;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 0.25rem;
+}
+
+.footer-section a {
+    color: var(--white);
+    text-decoration: none;
+}
+
+.social-icons a {
+    margin-right: 1rem;
+    font-size: 1.2rem;
+}
+
+.footer-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+.footer-bottom p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+@media screen and (max-width: 768px) {
+    footer.expanded {
+        height: 80vh;
+        overflow-y: auto;
+    }
+}

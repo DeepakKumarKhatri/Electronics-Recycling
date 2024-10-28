@@ -41,3 +41,38 @@ function loadComponent(file, elementId) {
 // Load the header and footer
 loadComponent('../pages/components/header.html', 'header-placeholder');
 loadComponent('../pages/components/footer.html', 'footer-placeholder');
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const footer = document.getElementById('footer');
+    let isExpanded = false;
+    let lastScrollTop = 0;
+
+    window.addEventListener('scroll', function() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+
+        // Check if we're at the bottom of the page
+        if ((windowHeight + scrollTop) >= (documentHeight - 10)) {
+            if (!isExpanded) {
+                footer.classList.add('expanded');
+                isExpanded = true;
+            }
+        } else {
+            if (isExpanded && scrollTop < lastScrollTop) {
+                footer.classList.remove('expanded');
+                isExpanded = false;
+            }
+        }
+
+        lastScrollTop = scrollTop;
+    });
+
+    footer.addEventListener('click', function(e) {
+        if (e.target === footer || e.target.closest('.footer-bottom')) {
+            footer.classList.toggle('expanded');
+            isExpanded = !isExpanded;
+        }
+    });
+});
