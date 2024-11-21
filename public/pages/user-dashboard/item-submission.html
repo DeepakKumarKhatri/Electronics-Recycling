@@ -6,11 +6,10 @@
     <title>User Dashboard - EcoTech Recycle</title>
     <link rel="icon" type="image/x-icon" href="/assets/svgs/logo.svg">
     <link rel="stylesheet" href="../../css/dashboards/style.css">
-    <link rel="stylesheet" href="../../css/dashboards/profile-management.css">
+    <link rel="stylesheet" href="../../css/dashboards/item-submission.css">
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="dashboard-container">
@@ -32,7 +31,7 @@
 
         <main class="dashboard-main">
             <header class="dashboard-header">
-                <h1>Profile Management</h1>
+                <h1>Item Submission</h1>
                 <div class="user-info">
                     <span>Welcome, John</span>
                     <img src="../../assets/images/demo_user.png" alt="User Avatar" class="user-avatar" id="userAvatar">
@@ -44,50 +43,62 @@
             </header>
 
             <div class="dashboard-content">
-                <section class="profile-management">
-                    <div class="profile-image-section">
-                        <img src="../../assets/images/demo_user.png" alt="User Profile" id="profileImage">
-                        <button id="changeProfileImage" class="btn-primary">Change Profile Image</button>
-                        <input type="file" id="imageUpload" accept="image/*" style="display: none;">
-                    </div>
-                    <form id="profileForm" class="profile-form">
+                <section class="item-submission">
+                    <h2>Submit a New Item for Recycling</h2>
+                    <form id="itemSubmissionForm" class="submission-form">
                         <div class="form-group">
-                            <label for="fullName">Full Name</label>
-                            <input type="text" id="fullName" name="fullName" value="John Doe" required>
+                            <label for="itemType">Item Type</label>
+                            <select id="itemType" name="itemType" required>
+                                <option value="">Select Item Type</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="batteries">Batteries</option>
+                                <option value="appliances">Appliances</option>
+                                <option value="other">Other</option>
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" value="john.doe@example.com" required>
+                            <label for="itemDescription">Description</label>
+                            <textarea id="itemDescription" name="itemDescription" rows="3" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" value="(123) 456-7890">
+                            <label for="itemCondition">Condition</label>
+                            <select id="itemCondition" name="itemCondition" required>
+                                <option value="">Select Condition</option>
+                                <option value="new">New</option>
+                                <option value="likeNew">Like New</option>
+                                <option value="good">Good</option>
+                                <option value="fair">Fair</option>
+                                <option value="poor">Poor</option>
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label for="address">Address</label>
-                            <textarea id="address" name="address" rows="3">123 Eco Street, Green City, EC 12345</textarea>
+                            <label for="itemWeight">Estimated Weight (kg)</label>
+                            <input type="number" id="itemWeight" name="itemWeight" min="0" step="0.1" required>
                         </div>
                         <div class="form-group">
-                            <label for="newPassword">New Password</label>
-                            <input type="password" id="newPassword" name="newPassword">
+                            <label for="itemImages">Images</label>
+                            <input type="file" id="itemImages" name="itemImages" accept="image/*" multiple>
+                            <div id="imagePreview" class="image-preview"></div>
                         </div>
                         <div class="form-group">
-                            <label for="confirmPassword">Confirm New Password</label>
-                            <input type="password" id="confirmPassword" name="confirmPassword">
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn-primary">Save Changes</button>
+                            <button type="submit" class="btn-primary">Submit Item</button>
                         </div>
                     </form>
+                </section>
+
+                <section class="item-management">
+                    <h2>Manage Submitted Items</h2>
+                    <div class="item-list" id="itemList">
+                        <!-- Items will be dynamically added here -->
+                    </div>
                 </section>
             </div>
         </main>
     </div>
 
     <script src="../../js/main.js"></script>
-    <script src="../../js/user-dashboard.js"></script>
+    <script src="../../js/item-submission.js"></script>
     <script src="../../js/utils/helper.js"></script>
-    <script src="../../js/profile-management.js"></script>
-    <script src="../../js/user-dashboard.js"></script>
+    <script src="../../js/user-dashboard.js" ></script>
 </body>
 </html>
