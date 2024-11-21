@@ -7,12 +7,59 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Status {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
 model User {
-  id         Int      @id @default(autoincrement())
-  fullName   String?
-  email      String   @unique
-  password   String
-  role       String   @default("user")
-  created_at DateTime @default(now())
-  updatedAt  DateTime @default(now())
+  id            Int             @id @default(autoincrement())
+  fullName      String?
+  email         String          @unique
+  password      String
+  role          Role            @default(USER)
+  phone_number  String?
+  address       String?
+  imageUrl      String?
+  imageId       String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now())
+  recycleItem   RecycleItem[]
+  pickupRequest PickupRequest[]
+}
+
+model RecycleItem {
+  id             Int      @id @default(autoincrement())
+  itemType       String
+  description    String
+  condition      String
+  weight         Int
+  imageUrl       String?
+  imageId        String?
+  user           User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         Int
+  rewards_points Int
+  status         Status
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now())
+}
+
+model PickupRequest {
+  id                  Int      @id @default(autoincrement())
+  user                User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId              Int
+  pickupAddress       String
+  pickupDate          DateTime
+  pickupTime          DateTime
+  itemsForPickup      String
+  specialInstructions String?
+  status              Status
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @default(now())
 }
