@@ -1,4 +1,8 @@
-/* General styling */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
 .dashboard-container {
     display: flex;
     min-height: 100vh;
@@ -25,11 +29,14 @@
 }
 
 .sidebar-toggle {
-    background: none;
+    display: block;
+    background: transparent;
     border: none;
-    color: #ecf0f1;
+    color: white;
+    font-size: 1.5rem;
     cursor: pointer;
 }
+
 
 .sidebar-nav ul {
     list-style: none;
@@ -198,11 +205,11 @@
     }
 
     .sidebar {
-        transform: translateX(-100%);
+        transform: translateX(100%);
         position: absolute;
-        z-index: 10;
+        z-index: 1000;
         transition: transform 0.3s ease;
-    }
+    } 
 
     .sidebar.active {
         transform: translateX(0);
@@ -224,9 +231,18 @@
         font-size: large;
     }
 
+    h2{
+        margin-right: 2px;
+        font-size: large;
+    }
+
     span{
         font-size: small;
         font-weight: 700;
+    }
+
+    .sidebar-nav{
+        margin-top: 40px;
     }
 
     .sidebar-toggle {
@@ -234,6 +250,67 @@
         background-color: transparent;
         border: none;
         color: #fff;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+}
+
+.user-avatar {
+    cursor: pointer;
+}
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    animation: fadeIn 0.3s ease;
+}
+.dropdown-menu a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.3s;
+}
+.dropdown-menu a:hover {
+    background-color: #f1f1f1;
+}
+.dropdown-menu.show {
+    display: block;
+}
+
+.sidebar {
+    transition: transform 0.3s ease;
+}
+.sidebar.active {
+    transform: translateX(0);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-83%);
+        position: fixed;
+        z-index: 1000;
+    }
+    .sidebar-toggle {
+        display: block;
+        background: transparent;
+        border: none;
+        color: white;
         font-size: 1.5rem;
         cursor: pointer;
     }

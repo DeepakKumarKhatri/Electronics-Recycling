@@ -44,11 +44,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-document.addEventListener("DOMContentLoaded", function() {
-    const sidebar = document.getElementById('sidebar');
+document.addEventListener("DOMContentLoaded", () => {
+    // Sidebar Toggle
     const sidebarToggle = document.getElementById('sidebarToggle');
-
-    sidebarToggle.addEventListener('click', function() {
+    const sidebar = document.getElementById('sidebar');
+    sidebarToggle.addEventListener('click', () => {
         sidebar.classList.toggle('active');
+    });
+
+    // Profile Dropdown
+    const userAvatar = document.getElementById('userAvatar');
+    const userDropdown = document.getElementById('userDropdown');
+    userAvatar.addEventListener('click', () => {
+        userDropdown.classList.toggle('show');
+    });
+
+    // Close Dropdown on Click Outside
+    document.addEventListener('click', (e) => {
+        if (!userAvatar.contains(e.target) && !userDropdown.contains(e.target)) {
+            userDropdown.classList.remove('show');
+        }
     });
 });
