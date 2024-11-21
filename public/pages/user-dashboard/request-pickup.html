@@ -6,10 +6,11 @@
     <title>User Dashboard - EcoTech Recycle</title>
     <link rel="icon" type="image/x-icon" href="/assets/svgs/logo.svg">
     <link rel="stylesheet" href="../../css/dashboards/style.css">
-    <link rel="stylesheet" href="../../css/dashboards/search.css">
+    <link rel="stylesheet" href="../../css/dashboards/pickup-request.css">
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="dashboard-container">
@@ -33,7 +34,7 @@
 
         <main class="dashboard-main">
             <header class="dashboard-header">
-                <h1>Dyanmic Search</h1>
+                <h1>Request Pickup</h1>
                 <div class="user-info">
                     <span>Welcome, John</span>
                     <img src="../../assets/images/demo_user.png" alt="User Avatar" class="user-avatar" id="userAvatar">
@@ -45,43 +46,49 @@
             </header>
 
             <div class="dashboard-content">
-                <section class="search-section">
-                    <div class="search-bar">
-                        <input type="text" id="searchInput" placeholder="Search for items, locations, dates...">
-                        <button id="searchButton" class="btn-primary">Search</button>
+                <p>Schedule a convenient time for us to collect your recyclable electronics.</p>
+        
+                <form id="pickupRequestForm" class="pickup-form">
+                    
+                    <div class="form-group">
+                        <label for="address">Pickup Address:</label>
+                        <textarea id="address" name="address" rows="3" required></textarea>
                     </div>
-                    <div class="search-filters">
-                        <div class="filter-group">
-                            <label for="categoryFilter">Category:</label>
-                            <select id="categoryFilter">
-                                <option value="all">All Categories</option>
-                                <option value="electronics">Electronics</option>
-                                <option value="batteries">Batteries</option>
-                                <option value="appliances">Appliances</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label for="dateFilter">Date Range:</label>
-                            <select id="dateFilter">
-                                <option value="all">All Time</option>
-                                <option value="7">Last 7 days</option>
-                                <option value="30">Last 30 days</option>
-                                <option value="90">Last 3 months</option>
-                                <option value="365">Last year</option>
-                            </select>
-                        </div>
+        
+                    <div class="form-group">
+                        <label for="pickup-date">Preferred Pickup Date:</label>
+                        <input type="date" id="pickup-date" name="pickup-date" required>
                     </div>
-                    <div class="search-results" id="searchResults">
-                        <!-- Search results will be dynamically added here -->
+        
+                    <div class="form-group">
+                        <label for="pickup-time">Preferred Pickup Time:</label>
+                        <select id="pickup-time" name="pickup-time" required>
+                            <option value="">Select a time</option>
+                            <option value="morning">Morning (9am - 12pm)</option>
+                            <option value="afternoon">Afternoon (1pm - 5pm)</option>
+                            <option value="evening">Evening (6pm - 8pm)</option>
+                        </select>
                     </div>
-                </section>
+        
+                    <div class="form-group">
+                        <label for="items">Items for Pickup:</label>
+                        <textarea id="items" name="items" rows="4" placeholder="Please list the items you want to recycle (e.g., 2 laptops, 1 printer, 3 smartphones)" required></textarea>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="special-instructions">Special Instructions (Optional):</label>
+                        <textarea id="special-instructions" name="special-instructions" rows="3"></textarea>
+                    </div>
+        
+                    <button type="submit" class="submit-btn">Schedule Pickup</button>
+                </form>
             </div>
         </main>
     </div>
 
     <script src="../../js/main.js"></script>
     <script src="../../js/utils/helper.js"></script>
-    <script src="../../js/search.js"></script>
+    <script src="../../js/rewards-redemption.js"></script>
+    <script src="../../js/user-dashboard.js"></script>
 </body>
 </html>

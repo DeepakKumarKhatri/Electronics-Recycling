@@ -6,10 +6,11 @@
     <title>User Dashboard - EcoTech Recycle</title>
     <link rel="icon" type="image/x-icon" href="/assets/svgs/logo.svg">
     <link rel="stylesheet" href="../../css/dashboards/style.css">
-    <link rel="stylesheet" href="../../css/dashboards/search.css">
+    <link rel="stylesheet" href="../../css/dashboards/rewards-redemption.css">
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="dashboard-container">
@@ -33,7 +34,7 @@
 
         <main class="dashboard-main">
             <header class="dashboard-header">
-                <h1>Dyanmic Search</h1>
+                <h1>Rewards Claim</h1>
                 <div class="user-info">
                     <span>Welcome, John</span>
                     <img src="../../assets/images/demo_user.png" alt="User Avatar" class="user-avatar" id="userAvatar">
@@ -45,43 +46,38 @@
             </header>
 
             <div class="dashboard-content">
-                <section class="search-section">
-                    <div class="search-bar">
-                        <input type="text" id="searchInput" placeholder="Search for items, locations, dates...">
-                        <button id="searchButton" class="btn-primary">Search</button>
-                    </div>
-                    <div class="search-filters">
-                        <div class="filter-group">
-                            <label for="categoryFilter">Category:</label>
-                            <select id="categoryFilter">
-                                <option value="all">All Categories</option>
-                                <option value="electronics">Electronics</option>
-                                <option value="batteries">Batteries</option>
-                                <option value="appliances">Appliances</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label for="dateFilter">Date Range:</label>
-                            <select id="dateFilter">
-                                <option value="all">All Time</option>
-                                <option value="7">Last 7 days</option>
-                                <option value="30">Last 30 days</option>
-                                <option value="90">Last 3 months</option>
-                                <option value="365">Last year</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="search-results" id="searchResults">
-                        <!-- Search results will be dynamically added here -->
+                <section class="rewards-summary">
+                    <h2>Your Rewards Balance</h2>
+                    <div class="points-display">
+                        <i class="fas fa-star"></i>
+                        <span id="userPoints">1500</span> points
                     </div>
                 </section>
+
+                <section class="rewards-list">
+                    <h2>Available Rewards</h2>
+                    <div class="rewards-grid" id="rewardsGrid">
+                        <!-- Rewards will be dynamically added here -->
+                    </div>
+                </section>
+
+                <div id="redeemModal" class="modal">
+                    <div class="modal-content">
+                        <h2>Confirm Redemption</h2>
+                        <p>Are you sure you want to redeem <span id="redeemItemName"></span> for <span id="redeemItemPoints"></span> points?</p>
+                        <div class="modal-actions">
+                            <button id="confirmRedeem" class="btn-primary">Confirm</button>
+                            <button id="cancelRedeem" class="btn-secondary">Cancel</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
 
     <script src="../../js/main.js"></script>
     <script src="../../js/utils/helper.js"></script>
-    <script src="../../js/search.js"></script>
+    <script src="../../js/rewards-redemption.js"></script>
+    <script src="../../js/user-dashboard.js"></script>
 </body>
 </html>
