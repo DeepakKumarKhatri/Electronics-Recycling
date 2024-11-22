@@ -4,58 +4,75 @@ const { v4: uuidv4 } = require("uuid");
 const { setUser } = require("../service/auth");
 
 const register = async (req, res) => {
-  const { fullName, email, password } = req.body;
+  try {
+    const { fullName, email, password } = req.body;
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email: email,
-    },
-  });
-  if (user) {
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+    if (user) {
+      return res
+        .status(400)
+        .json({ message: "A User Exists with same email and password" });
+    }
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const new_user = await prisma.user.create({
+      data: {
+        fullName: fullName,
+        email: email,
+        password: hashedPassword,
+      },
+    });
+
+    return res.status(200).json({ message: "User Created", new_user });
+  } catch (error) {
+    console.error(error);
     return res
-      .status(400)
-      .json({ message: "A User Exists with same email and password" });
+      .status(500)
+      .json({ message: "An error occurred. Please try again later." });
   }
-  // Hash the password
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const new_user = await prisma.user.create({
-    data: {
-      fullName: fullName,
-      email: email,
-      password: hashedPassword,
-    },
-  });
-
-  return res.status(200).json({ message: "User Created", new_user });
 };
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email: email,
-    },
-  });
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
 
-  if (!user) {
-    return res.status(404).json({ message: "Invalid Creditionals" });
+    if (!user) {
+      return res.status(404).json({ message: "Invalid Creditionals" });
+    }
+
+    const passwordMatched = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatched) {
+      return res.status(404).json({ message: "Invalid Creditionals" });
+    }
+
+    // Generate session Id
+    const user_session_id = uuidv4();
+
+    // Set user in server map and send a cookie to browser
+    setUser(user_session_id, user);
+    res.cookie("uid", user_session_id, {
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    });
+
+    return res.status(200).json({ message: "Successfull" });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ message: "An error occurred. Please try again later." });
   }
-
-  const passwordMatched = await bcrypt.compare(password, user.password);
-
-  if (!passwordMatched) {
-    return res.status(404).json({ message: "Invalid Creditionals" });
-  }
-
-  // Generate session Id
-  const user_session_id = uuidv4();
-
-  // Set user in server map and send a cookie to browser
-  setUser(user_session_id, user);
-  res.cookie("uid", user_session_id);
-  return res.status(200).json({ message: "Successfull" });
 };
 
 module.exports = {
