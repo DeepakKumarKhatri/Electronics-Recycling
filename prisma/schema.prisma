@@ -32,6 +32,7 @@ model User {
   updatedAt     DateTime        @default(now())
   recycleItem   RecycleItem[]
   pickupRequest PickupRequest[]
+  Session       Session[]
 }
 
 model RecycleItem {
@@ -62,4 +63,13 @@ model PickupRequest {
   status              Status
   createdAt           DateTime @default(now())
   updatedAt           DateTime @default(now())
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    Int
+  sessionId String   @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

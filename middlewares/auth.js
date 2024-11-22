@@ -11,7 +11,7 @@ async function verifyUserSession(req, res, next) {
     );
   }
 
-  const user = getUser(user_session_id);
+  const user = await getUser(user_session_id);
   if (!user) {
     return res.sendFile(
       path.join(__dirname, "../public/pages/auth/index.html")

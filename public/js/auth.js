@@ -72,8 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
       "registerConfirmPassword"
     ).value;
 
-    console.log({ fullName, email, password, registerConfirmPassword });
-
     if (password !== registerConfirmPassword) {
       alert("Passwords do not match.");
       return;

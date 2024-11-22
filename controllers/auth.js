@@ -60,8 +60,10 @@ const login = async (req, res) => {
     // Generate session Id
     const user_session_id = uuidv4();
 
-    // Set user in server map and send a cookie to browser
-    setUser(user_session_id, user);
+    // Store the session in the database
+    await setUser(user_session_id, user);
+
+    // Set cookie with the session ID
     res.cookie("uid", user_session_id, {
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
