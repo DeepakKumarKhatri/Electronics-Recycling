@@ -66,7 +66,8 @@ const login = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
 
-    return res.status(200).json({ message: "Successfull" });
+    const user_role = user.role;
+    return res.status(200).json({ message: "Successfull", user_role });
   } catch (error) {
     console.error(error);
     return res
