@@ -9,5 +9,7 @@ router.get("/", verifyUserSession, function (req, res, next) {
 });
 
 router.get("/user-details", userController.getUserDetails);
+router.get("/user-profile", userController.profileData);
+router.put("/user-profile", userController.updateProfileData);
 
 module.exports = router;
