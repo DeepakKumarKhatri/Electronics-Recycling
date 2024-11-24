@@ -4,6 +4,7 @@ const path = require("path");
 async function verifyUserSession(req, res, next) {
   const user_session_id = req.cookies?.uid;
   console.log("user_session_id: ", user_session_id);
+  console.log("req.originalUrl: ", req.originalUrl);
 
   if (!user_session_id) {
     return res.sendFile(

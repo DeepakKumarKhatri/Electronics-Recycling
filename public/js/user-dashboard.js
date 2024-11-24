@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // Recycling History Chart
     const recyclingCtx = document.getElementById('recyclingChart').getContext('2d');
     new Chart(recyclingCtx, {
