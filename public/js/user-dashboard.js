@@ -66,3 +66,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const response = await fetch('/api/users/user-details', { credentials: 'include' });
+        if (!response.ok) throw new Error("Failed to fetch user details");
+
+        const { user } = await response.json();
+        document.querySelector('.user-info span').textContent = `Welcome, ${user.fullName.split(" ")[0]}`;
+        document.getElementById('userAvatar').src = user.avatar || '/default-avatar.png';
+    } catch (error) {
+        console.error("Error fetching user details:", error);
+        // window.location.href = '/login.html'; // Redirect to login on error
+    }
+});

@@ -47,9 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify(loginData),
       });
       const data = await response.json();
+      console.log({data});
 
-      if (data.message === "Successfull") {
-        if (data.user_role === "USER") {
+      if (data.message === "Successful") {
+        if (data.user.role === "USER") {
           window.location.href = "/pages/user-dashboard/index.html";
         } else {
           window.location.href = "/pages/admin-dashboard/index.html";

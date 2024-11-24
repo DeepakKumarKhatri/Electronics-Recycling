@@ -66,10 +66,19 @@ const login = async (req, res) => {
     // Set cookie with the session ID
     res.cookie("uid", user_session_id, {
       maxAge: 24 * 60 * 60 * 1000, // 1 day
+      httpOnly: true,
     });
 
-    const user_role = user.role;
-    return res.status(200).json({ message: "Successfull", user_role });
+    return res.status(200).json({
+      message: "Successful",
+      user: {
+        id: user.id,
+        fullName: user.fullName,
+        email: user.email,
+        role: user.role,
+      },
+    });
+    
   } catch (error) {
     console.error(error);
     return res
