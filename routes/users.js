@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 const { verifyUserSession } = require("../middlewares/auth");
 const userController = require("../controllers/user");
+const upload = require("../middlewares/multer");
 
 /* GET users listing. */
 router.get("/", verifyUserSession, function (req, res, next) {
@@ -9,7 +10,10 @@ router.get("/", verifyUserSession, function (req, res, next) {
 });
 
 router.get("/user-details", userController.getUserDetails);
-router.get("/user-profile", userController.profileData);
-router.put("/user-profile", userController.updateProfileData);
+router.put(
+  "/user-profile",
+  upload.single("image"),
+  userController.updateProfileData
+);
 
 module.exports = router;
