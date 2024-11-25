@@ -11,13 +11,9 @@ const getItems = async (req, res) => {
     const user = await getUser(sessionId);
     if (!user) return res.status(401).json({ message: "Session expired" });
 
-    const { status, itemType } = req.query;
-
     const items = await prisma.recycleItem.findMany({
       where: {
         userId: user.id,
-        ...(status && { status: status.toUpperCase() }), // Optional filtering
-        ...(itemType && { itemType }),
       },
     });
 
@@ -119,7 +115,8 @@ const addItem = async (req, res) => {
       condition,
       weight: Number(weight),
       rewards_points: points(condition),
-      status: "pending",
+      status: "PENDING",
+      userId: Number(user.id),
       imageUrl: uploadedImage.secure_url || user.imageUrl,
       imageId: uploadedImage.public_id || user.imageId,
     };
@@ -178,7 +175,7 @@ const updateItem = async (req, res) => {
     const user = await getUser(sessionId);
     if (!user) return res.status(401).json({ message: "Session expired" });
 
-    const { itemType, description, condition, weight, status } = req.body;
+    const { description, weight } = req.body;
 
     const existingItem = await prisma.recycleItem.findFirst({
       where: { id: Number(id), userId: user.id },
@@ -212,13 +209,8 @@ const updateItem = async (req, res) => {
     const updatedItem = await prisma.recycleItem.update({
       where: { id: Number(id) },
       data: {
-        itemType,
         description,
-        condition,
         weight: weight ? Number(weight) : existingItem.weight,
-        status: status ? status.toUpperCase() : existingItem.status,
-        imageUrl: updatedImage.secure_url || existingItem.imageUrl,
-        imageId: updatedImage.public_id || existingItem.imageId,
       },
     });
 

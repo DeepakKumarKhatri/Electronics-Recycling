@@ -19,7 +19,7 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use("/", indexRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/auth", authRouter);
-app.use("/api/item", itemsRouter);
+app.use("/api/items", itemsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
