@@ -35,21 +35,26 @@ const updateProfileData = async (req, res) => {
         return res.status(400).json({ message: "File size exceeds 2MB" });
       }
 
-      // Upload file buffer to Cloudinary
-      const uploadStream = cloudinary.uploader.upload_stream(
-        { resource_type: "auto", public_id: `${Date.now()}` },
-        (error, result) => {
-          if (error) throw error;
-          uploadedImage = result;
-        }
-      );
+      try {
+        // Upload file buffer to Cloudinary
+        uploadedImage = await new Promise((resolve, reject) => {
+          const uploadStream = cloudinary.uploader.upload_stream(
+            { resource_type: "auto", public_id: `${Date.now()}` },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+            }
+          );
 
-      // Convert buffer to readable stream
-      const readableStream = Readable.from(req.file.buffer);
-      readableStream.pipe(uploadStream);
+          // Convert buffer to readable stream
+          const readableStream = Readable.from(req.file.buffer);
+          readableStream.pipe(uploadStream);
+        });
+      } catch (error) {
+        console.error("Error uploading image to Cloudinary:", error);
+        return res.status(500).json({ message: "Error uploading image" });
+      }
     }
-
-    console.log({ uploadedImage });
 
     const updatedUser = await prisma.user.update({
       where: { id: user.id },
@@ -68,7 +73,7 @@ const updateProfileData = async (req, res) => {
       .json({ user: updatedUser, message: "Profile updated successfully" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Server Error", error });
+    return res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
 
