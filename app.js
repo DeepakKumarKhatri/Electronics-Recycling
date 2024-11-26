@@ -38,6 +38,19 @@ app.use(function (req, res, next) {
   next(createError(404));
 });
 
+JSON.stringify = (function() {
+  const originalStringify = JSON.stringify;
+  return function(value, replacer, space) {
+    return originalStringify(value, function(key, val) {
+      // Convert BigInt to string
+      if (typeof val === 'bigint') {
+        return val.toString();
+      }
+      return replacer ? replacer(key, val) : val;
+    }, space);
+  };
+})();
+
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development

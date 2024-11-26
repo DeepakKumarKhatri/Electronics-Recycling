@@ -348,8 +348,14 @@ const updateProfileData = async (req, res) => {
 
 const getUserDetails = async (req, res) => {
   try {
+    const sessionId = req.cookies.uid;
+    if (!sessionId) return res.status(401).json({ message: "Unauthorized" });
+
+    let user = await getUser(sessionId);
+    if (!user) return res.status(401).json({ message: "Session expired" });
+
     const { userId } = req.params;
-    const user = await prisma.user.findUnique({
+    user = await prisma.user.findUnique({
       where: { id: parseInt(userId) },
       select: {
         id: true,
@@ -373,6 +379,182 @@ const getUserDetails = async (req, res) => {
   }
 };
 
+const getRecyclingOverview = async (req, res) => {
+  try {
+    const sessionId = req.cookies.uid;
+    if (!sessionId) return res.status(401).json({ message: "Unauthorized" });
+
+    const user = await getUser(sessionId);
+    if (!user) return res.status(401).json({ message: "Session expired" });
+
+    // Total recycled items
+    const totalRecycleItems = await prisma.recycleItem.count();
+    const approvedRecycleItems = await prisma.recycleItem.count({
+      where: { status: "APPROVED" },
+    });
+
+    // Total weight of recycled items
+    const totalWeight = await prisma.recycleItem.aggregate({
+      _sum: { weight: true },
+    });
+
+    // Recycling items by type
+    const recycleItemsByType = await prisma.recycleItem.groupBy({
+      by: ["itemType"],
+      _count: { id: true },
+      _sum: { weight: true },
+    });
+
+    // Monthly recycling trends
+    const monthlyRecyclingTrends = await prisma.$queryRaw`
+      SELECT 
+        DATE_FORMAT(createdAt, '%Y-%m') as month, 
+        COUNT(*) as itemCount,
+        SUM(weight) as totalWeight
+      FROM RecycleItem
+      WHERE status = 'APPROVED'
+      GROUP BY month
+      ORDER BY month
+      LIMIT 12
+    `;
+
+    // Pickup request statistics
+    const pickupRequestStats = await prisma.pickupRequest.groupBy({
+      by: ["status"],
+      _count: { id: true },
+    });
+
+    res.status(200).json({
+      totalRecycleItems,
+      approvedRecycleItems,
+      totalWeight: totalWeight._sum.weight || 0,
+      recycleItemsByType,
+      monthlyRecyclingTrends,
+      pickupRequestStats,
+    });
+  } catch (error) {
+    console.error("Error generating recycling overview:", error);
+    res.status(500).json({
+      message: "Failed to generate recycling overview",
+      error: error.message,
+    });
+  }
+};
+
+const getUserRecyclingPerformance = async (req, res) => {
+  try {
+    const sessionId = req.cookies.uid;
+    if (!sessionId) return res.status(401).json({ message: "Unauthorized" });
+
+    const user = await getUser(sessionId);
+    if (!user) return res.status(401).json({ message: "Session expired" });
+
+    const { page = 1, limit = 10, sortBy = "totalWeight" } = req.query;
+
+    // First, fetch the users with their recycling items
+    const userPerformance = await prisma.user.findMany({
+      where: { role: "USER" },
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        points: true,
+        recycleItem: {
+          where: { status: "APPROVED" },
+          select: {
+            weight: true
+          }
+        }
+      },
+      skip: (page - 1) * limit,
+      take: Number(limit)
+    });
+
+    // Transform user performance data with total weight calculation
+    const processedPerformance = userPerformance.map((user) => ({
+      id: user.id,
+      fullName: user.fullName,
+      email: user.email,
+      points: user.points,
+      totalItems: user.recycleItem.length,
+      totalWeight: user.recycleItem.reduce((sum, item) => sum + item.weight, 0)
+    }));
+
+    // Sort the processed performance 
+    const sortedPerformance = processedPerformance.sort((a, b) => 
+      sortBy === "totalWeight" ? b.totalWeight - a.totalWeight : b.totalItems - a.totalItems
+    );
+
+    const totalUsers = await prisma.user.count({
+      where: { role: "USER" }
+    });
+
+    res.status(200).json({
+      userPerformance: sortedPerformance,
+      pagination: {
+        currentPage: Number(page),
+        totalPages: Math.ceil(totalUsers / limit),
+        totalUsers
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching user recycling performance:", error);
+    res.status(500).json({
+      message: "Failed to fetch user recycling performance",
+      error: error.message
+    });
+  }
+};
+
+const getEnvironmentalImpactReport = async (req, res) => {
+  try {
+
+    const sessionId = req.cookies.uid;
+    if (!sessionId) return res.status(401).json({ message: "Unauthorized" });
+
+    const user = await getUser(sessionId);
+    if (!user) return res.status(401).json({ message: "Session expired" });
+
+    // CO2 savings calculation (estimated)
+    const totalWeight = await prisma.recycleItem.aggregate({
+      _sum: { weight: true },
+      where: { status: "APPROVED" },
+    });
+
+    // Estimations based on average recycling impact
+    const CO2_SAVINGS_PER_KG = 2.5; // Estimated kg of CO2 saved per kg recycled
+    const ENERGY_SAVINGS_PER_KG = 0.5; // Estimated kWh saved per kg recycled
+    const WATER_SAVINGS_PER_KG = 0.3; // Estimated liters of water saved per kg recycled
+
+    const weight = totalWeight._sum.weight || 0;
+
+    const environmentalImpact = {
+      totalWeight: weight,
+      CO2Savings: weight * CO2_SAVINGS_PER_KG,
+      energySavings: weight * ENERGY_SAVINGS_PER_KG,
+      waterSavings: weight * WATER_SAVINGS_PER_KG,
+    };
+
+    // Breakdown by item type
+    const itemTypeBreakdown = await prisma.recycleItem.groupBy({
+      by: ["itemType"],
+      _sum: { weight: true },
+      where: { status: "APPROVED" },
+    });
+
+    res.status(200).json({
+      environmentalImpact,
+      itemTypeBreakdown,
+    });
+  } catch (error) {
+    console.error("Error generating environmental impact report:", error);
+    res.status(500).json({
+      message: "Failed to generate environmental impact report",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getDashboardData,
   getAllUsers,
@@ -382,4 +564,7 @@ module.exports = {
   getAdminDetails,
   updateProfileData,
   getUserDetails,
+  getRecyclingOverview,
+  getUserRecyclingPerformance,
+  getEnvironmentalImpactReport,
 };

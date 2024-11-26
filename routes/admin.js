@@ -17,5 +17,8 @@ router.put(
   verifyUserSession,
   adminController.updateProfileData
 );
+router.get("/overview", verifyUserSession, adminController.getRecyclingOverview);
+router.get("/user-performance", verifyUserSession, adminController.getUserRecyclingPerformance);
+router.get("/environmental-impact", verifyUserSession, adminController.getEnvironmentalImpactReport);
 
 module.exports = router;
