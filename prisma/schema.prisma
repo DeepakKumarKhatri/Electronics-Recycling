@@ -56,8 +56,8 @@ model PickupRequest {
   user                User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId              Int
   pickupAddress       String
-  pickupDate          DateTime
-  pickupTime          DateTime
+  pickupDate          String
+  pickupTime          String
   itemsForPickup      String
   specialInstructions String?
   status              Status

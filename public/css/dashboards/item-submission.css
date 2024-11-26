@@ -137,8 +137,6 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* ... (previous CSS code remains unchanged) */
-
 /* Modal styles */
 .modal {
     display: none;
@@ -219,5 +217,3 @@ button:hover {
 #updateItemBtn:hover {
     background-color: #27ae60;
 }
-
-/* ... (remaining CSS code remains unchanged) */
