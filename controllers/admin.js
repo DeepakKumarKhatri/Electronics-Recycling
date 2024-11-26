@@ -346,6 +346,33 @@ const updateProfileData = async (req, res) => {
   }
 };
 
+const getUserDetails = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await prisma.user.findUnique({
+      where: { id: parseInt(userId) },
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        phone_number: true,
+        createdAt: true,
+        points: true,
+        imageUrl: true,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching user details" });
+  }
+};
+
 module.exports = {
   getDashboardData,
   getAllUsers,
@@ -354,4 +381,5 @@ module.exports = {
   changeStatusOfPickUpRequest,
   getAdminDetails,
   updateProfileData,
+  getUserDetails,
 };

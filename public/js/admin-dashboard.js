@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     profileLink.addEventListener('click', async (e) => {
         e.preventDefault();
-        window.location.href = '/pages/user-dashboard/profile-management.html';
+        window.location.href = '/pages/admin-dashboard/admin-profile-management.html';
     });
 
     logoutLink.addEventListener('click', async (e) => {

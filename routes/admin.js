@@ -10,6 +10,7 @@ router.get("/submissions", verifyUserSession, adminController.getUsersSubmission
 router.post("/change-status", verifyUserSession, adminController.changeStatusOfSubmission);
 router.post("/decide-pickup", verifyUserSession, adminController.changeStatusOfPickUpRequest);
 router.get("/user-details", verifyUserSession, adminController.getAdminDetails);
+router.get("/user-details/:userId", verifyUserSession, adminController.getUserDetails);
 router.put(
   "/user-profile",
   upload.single("image"),

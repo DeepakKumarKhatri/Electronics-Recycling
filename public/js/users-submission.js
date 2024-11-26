@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const approvalItems = document.getElementById('approvalItems');
     const statusFilter = document.getElementById('statusFilter');
-    const dateFilter = document.getElementById('dateFilter');
     const applyFiltersBtn = document.getElementById('applyFilters');
     const approvalModal = document.getElementById('approvalModal');
     const modalContent = document.getElementById('modalContent');
@@ -10,7 +9,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const closeModal = document.getElementById('closeModal');
 
     let currentPage = 1;
-    let totalPages = 1;
     let submissions = []; // Store submissions globally
 
     // Fetch user details
