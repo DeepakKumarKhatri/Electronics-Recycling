@@ -5,9 +5,9 @@ async function setUser(sessionId, user) {
   expiresAt.setDate(expiresAt.getDate() + 1); // Set expiration to 1 day
 
   // Remove all previous sessions for the user
-  await prisma.session.deleteMany({
-    where: { userId: user.id },
-  });
+  // await prisma.session.deleteMany({
+  //   where: { userId: user.id },
+  // });
 
   // Create the new session
   await prisma.session.create({

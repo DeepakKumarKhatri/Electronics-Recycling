@@ -62,17 +62,15 @@ const addItem = async (req, res) => {
     const user = await getUser(sessionId);
     if (!user) return res.status(401).json({ message: "Session expired" });
 
-    const { itemType, description, condition, weight } = req.body;
+    const { itemType, itemDescription, itemCondition, itemWeight } = req.body;
 
     let uploadedImage = {};
     if (req.file) {
-      // Validate file size
       if (req.file.size > 2 * 1024 * 1024) {
         return res.status(400).json({ message: "File size exceeds 2MB" });
       }
 
       try {
-        // Upload file buffer to Cloudinary
         uploadedImage = await new Promise((resolve, reject) => {
           const uploadStream = cloudinary.uploader.upload_stream(
             { resource_type: "auto", public_id: `${Date.now()}` },
@@ -81,8 +79,6 @@ const addItem = async (req, res) => {
               else resolve(result);
             }
           );
-
-          // Convert buffer to readable stream
           const readableStream = Readable.from(req.file.buffer);
           readableStream.pipe(uploadStream);
         });
@@ -94,43 +90,35 @@ const addItem = async (req, res) => {
 
     const points = (condition) => {
       switch (condition) {
-        case "New":
-          return 100;
-        case "Like New":
-          return 80;
-        case "Good":
-          return 60;
-        case "Fair":
-          return 40;
-        case "Poor":
-          return 10;
-        default:
-          return 1;
+        case "new": return 100;
+        case "likeNew": return 80;
+        case "good": return 60;
+        case "fair": return 40;
+        case "poor": return 10;
+        default: return 1;
       }
     };
 
     const item_data = {
       itemType,
-      description,
-      condition,
-      weight: Number(weight),
-      rewards_points: points(condition),
+      description: itemDescription,
+      condition: itemCondition,
+      weight: Number(itemWeight),
+      rewards_points: points(itemCondition),
       status: "PENDING",
-      userId: Number(user.id),
-      imageUrl: uploadedImage.secure_url || user.imageUrl,
-      imageId: uploadedImage.public_id || user.imageId,
+      userId: user.id,
+      imageUrl: uploadedImage.secure_url || null,
+      imageId: uploadedImage.public_id || null,
     };
 
     const recycled_item = await prisma.recycleItem.create({
       data: item_data,
     });
 
-    return res.status(200).json({ item: recycled_item, message: "success" });
+    return res.status(201).json({ item: recycled_item, message: "Item added successfully" });
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .json({ message: "Server Error", error: error.message });
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
 
@@ -175,7 +163,7 @@ const updateItem = async (req, res) => {
     const user = await getUser(sessionId);
     if (!user) return res.status(401).json({ message: "Session expired" });
 
-    const { description, weight } = req.body;
+    const { itemDescription, itemWeight } = req.body;
 
     const existingItem = await prisma.recycleItem.findFirst({
       where: { id: Number(id), userId: user.id },
@@ -184,33 +172,11 @@ const updateItem = async (req, res) => {
     if (!existingItem)
       return res.status(404).json({ message: "Item not found" });
 
-    let updatedImage = {};
-    if (req.file) {
-      if (req.file.size > 2 * 1024 * 1024) {
-        return res.status(400).json({ message: "File size exceeds 2MB" });
-      }
-
-      if (existingItem.imageId) {
-        await cloudinary.uploader.destroy(existingItem.imageId); // Delete old image
-      }
-
-      updatedImage = await new Promise((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
-          { resource_type: "auto", public_id: `${Date.now()}` },
-          (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
-          }
-        );
-        Readable.from(req.file.buffer).pipe(uploadStream);
-      });
-    }
-
     const updatedItem = await prisma.recycleItem.update({
       where: { id: Number(id) },
       data: {
-        description,
-        weight: weight ? Number(weight) : existingItem.weight,
+        description: itemDescription,
+        weight: itemWeight ? Number(itemWeight) : existingItem.weight,
       },
     });
 

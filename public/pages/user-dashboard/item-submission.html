@@ -90,12 +90,30 @@
 
                 <section class="item-management">
                     <h2>Manage Submitted Items</h2>
-                    <div class="item-list" id="itemList">
-                        <!-- Items will be dynamically added here -->
-                    </div>
+                    <div id="itemList"></div>
                 </section>
             </div>
         </main>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Item</h2>
+            <form id="editItemForm">
+                <div class="form-group">
+                    <label for="editItemDescription">Description</label>
+                    <textarea id="editItemDescription" name="itemDescription" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editItemWeight">Estimated Weight (kg)</label>
+                    <input type="number" id="editItemWeight" name="itemWeight" min="0" step="0.1" required>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="updateItemBtn" class="btn-primary">Update Item</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script src="../../js/main.js"></script>

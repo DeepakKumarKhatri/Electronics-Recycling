@@ -8,13 +8,13 @@ router.get("/", verifyUserSession, itemsController.getItems);
 router.get("/:id", verifyUserSession, itemsController.getItem);
 router.post(
   "/",
-  upload.single("image"),
+  upload.single("itemImages"),
   verifyUserSession,
   itemsController.addItem
 );
 router.put(
   "/:id",
-  upload.single("image"),
+  upload.single("itemImages"),
   verifyUserSession,
   itemsController.updateItem
 );
