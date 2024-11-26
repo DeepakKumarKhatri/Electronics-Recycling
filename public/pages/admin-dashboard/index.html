@@ -13,32 +13,35 @@
 </head>
 <body>
     <div class="dashboard-container">
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h2>EcoTech Recycle</h2>
+                <button id="sidebarToggle" class="sidebar-toggle"><i class="fas fa-bars"></i></button>
             </div>
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="#"><i class="fas fa-users"></i> Users</a></li>
-                    <li><a href="#"><i class="fas fa-truck"></i> Pickups</a></li>
-                    <li><a href="#"><i class="fas fa-chart-bar"></i> Reports</a></li>
-                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="/pages/admin-dashboard/index.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="/pages/admin-dashboard/users-submission.html"><i class="fas fa-hand-holding-heart"></i> Submissions</a></li>
+                    <li><a href="/pages/admin-dashboard/reporting.html"><i class="fas fa-clipboard"></i> Reporting</a></li>
+                    <li><a href="/pages/admin-dashboard/system-users.html"><i class="fas fa-users-between-lines"></i> Users</a></li>
+                    <li><a href="/pages/admin-dashboard/admin-profile-management.html"><i class="fas fa-cog"></i> Settings</a></li>
                 </ul>
             </nav>
         </aside>
+
         <main class="dashboard-main">
             <header class="dashboard-header">
                 <h1>Dashboard</h1>
                 <div class="user-info">
-                    <span>Welcome, Admin</span>
-                    <img src="../../assets/images/demo_user.png" alt="Admin Avatar" class="user-avatar" id="userAvatar">
+                    <span>Welcome, John</span>
+                    <img src="../../assets/images/demo_user.png" alt="User Avatar" class="user-avatar" id="userAvatar">
                     <div class="dropdown-menu" id="userDropdown">
-                        <a href="#" id="profileLink">Profile</a>
+                        <a href="/pages/user-dashboard/profile-management.html" id="profileLink">Profile</a>
                         <a href="#" id="logoutLink">Logout</a>
-                    </div>                
+                    </div>
                 </div>
             </header>
+
             <div class="dashboard-content">
                 <section class="dashboard-summary">
                     <div class="summary-card">
@@ -52,10 +55,6 @@
                     <div class="summary-card">
                         <h3>Pending Pickups</h3>
                         <p class="summary-value">42</p>
-                    </div>
-                    <div class="summary-card">
-                        <h3>Monthly Revenue</h3>
-                        <p class="summary-value">$15,000</p>
                     </div>
                 </section>
                 <section class="dashboard-charts">
@@ -88,6 +87,7 @@
             </div>
         </main>
     </div>
+
     <script src="../../js/main.js"></script>
     <script src="../../js/admin-dashboard.js"></script>
     <script src="../../js/utils/helper.js"></script>
