@@ -73,12 +73,12 @@ const cancelRequest = async (req, res) => {
     const user = await getUser(sessionId);
     if (!user) return res.status(401).json({ message: "Session expired" });
 
-    const pickup_request = await prisma.recycleItem.findFirst({
+    const pickup_request = await prisma.pickupRequest.findFirst({
       where: { id: Number(id), userId: user.id },
     });
 
     if (!pickup_request)
-      return res.status(404).json({ message: "Item not found" });
+      return res.status(404).json({ message: "Request not found" });
 
     await prisma.pickupRequest.delete({ where: { id: Number(id) } });
 
