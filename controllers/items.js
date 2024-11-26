@@ -90,32 +90,51 @@ const addItem = async (req, res) => {
 
     const points = (condition) => {
       switch (condition) {
-        case "new": return 100;
-        case "likeNew": return 80;
-        case "good": return 60;
-        case "fair": return 40;
-        case "poor": return 10;
-        default: return 1;
+        case "new":
+          return 100;
+        case "likeNew":
+          return 80;
+        case "good":
+          return 60;
+        case "fair":
+          return 40;
+        case "poor":
+          return 10;
+        default:
+          return 1;
       }
     };
+
+    const earnedPoints = points(itemCondition);
 
     const item_data = {
       itemType,
       description: itemDescription,
       condition: itemCondition,
       weight: Number(itemWeight),
-      rewards_points: points(itemCondition),
       status: "PENDING",
       userId: user.id,
       imageUrl: uploadedImage.secure_url || null,
       imageId: uploadedImage.public_id || null,
     };
 
-    const recycled_item = await prisma.recycleItem.create({
-      data: item_data,
-    });
+    // Use a transaction to ensure both operations succeed or fail together
+    const [recycled_item, updatedUser] = await prisma.$transaction([
+      prisma.recycleItem.create({
+        data: item_data,
+      }),
+      prisma.user.update({
+        where: { id: user.id },
+        data: { points: { increment: earnedPoints } },
+      }),
+    ]);
 
-    return res.status(201).json({ item: recycled_item, message: "Item added successfully" });
+    return res.status(201).json({
+      item: recycled_item,
+      pointsEarned: earnedPoints,
+      newTotalPoints: updatedUser.points,
+      message: "Item added successfully",
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error", error: error.message });

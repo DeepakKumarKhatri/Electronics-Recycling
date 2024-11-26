@@ -33,22 +33,23 @@ model User {
   recycleItem   RecycleItem[]
   pickupRequest PickupRequest[]
   Session       Session[]
+  redemptions   Redemption[]
+  points        Int             @default(0)
 }
 
 model RecycleItem {
-  id             Int      @id @default(autoincrement())
-  itemType       String
-  description    String
-  condition      String
-  weight         Int
-  imageUrl       String?
-  imageId        String?
-  user           User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId         Int
-  rewards_points Int
-  status         Status
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  itemType    String
+  description String
+  condition   String
+  weight      Int
+  imageUrl    String?
+  imageId     String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  status      Status
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
 }
 
 model PickupRequest {
@@ -72,4 +73,24 @@ model Session {
   createdAt DateTime @default(now())
   expiresAt DateTime
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Reward {
+  id          Int          @id @default(autoincrement())
+  name        String
+  description String
+  points      Int
+  imageUrl    String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  redemptions Redemption[]
+}
+
+model Redemption {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  reward    Reward   @relation(fields: [rewardId], references: [id])
+  rewardId  Int
+  createdAt DateTime @default(now())
 }
