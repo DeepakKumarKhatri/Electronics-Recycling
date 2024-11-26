@@ -1,9 +1,10 @@
 const prisma = require("../database/db.config");
 const { getUser } = require("../service/auth");
+const cloudinary = require("../utils/cloudinary");
+const { Readable } = require("stream");
 
 const getDashboardData = async (req, res) => {
   try {
-
     const sessionId = req.cookies.uid;
     if (!sessionId) return res.status(401).json({ message: "Unauthorized" });
 
@@ -12,67 +13,67 @@ const getDashboardData = async (req, res) => {
 
     // Get total users count
     const totalUsers = await prisma.user.count({
-      where: { role: 'USER' }
+      where: { role: "USER" },
     });
 
     // Calculate total recycled weight
     const totalRecycled = await prisma.recycleItem.aggregate({
-      where: { status: 'APPROVED' },
-      _sum: { weight: true }
+      where: { status: "APPROVED" },
+      _sum: { weight: true },
     });
 
     // Get pending pickup requests
     const pendingPickups = await prisma.pickupRequest.count({
-      where: { status: 'PENDING' }
+      where: { status: "PENDING" },
     });
 
     // Monthly Recycling Trends (last 6 months)
     const recyclingTrends = await prisma.recycleItem.groupBy({
-      by: ['createdAt'],
+      by: ["createdAt"],
       where: {
-        status: 'APPROVED',
+        status: "APPROVED",
         createdAt: {
-          gte: new Date(new Date().setMonth(new Date().getMonth() - 6))
-        }
+          gte: new Date(new Date().setMonth(new Date().getMonth() - 6)),
+        },
       },
       _sum: { weight: true },
-      orderBy: { createdAt: 'asc' }
+      orderBy: { createdAt: "asc" },
     });
 
     // User Growth Trends
     const userGrowthTrends = await prisma.user.groupBy({
-      by: ['createdAt'],
+      by: ["createdAt"],
       where: {
-        role: 'USER',
+        role: "USER",
         createdAt: {
-          gte: new Date(new Date().setMonth(new Date().getMonth() - 6))
-        }
+          gte: new Date(new Date().setMonth(new Date().getMonth() - 6)),
+        },
       },
       _count: { id: true },
-      orderBy: { createdAt: 'asc' }
+      orderBy: { createdAt: "asc" },
     });
 
     // Recent Activity
     const recentActivity = await prisma.recycleItem.findMany({
       take: 5,
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
       select: {
         createdAt: true,
         itemType: true,
         weight: true,
         user: {
           select: {
-            fullName: true
-          }
-        }
-      }
+            fullName: true,
+          },
+        },
+      },
     });
 
     // Recycling Breakdown by Item Type
     const recyclingBreakdown = await prisma.recycleItem.groupBy({
-      by: ['itemType'],
-      where: { status: 'APPROVED' },
-      _sum: { weight: true }
+      by: ["itemType"],
+      where: { status: "APPROVED" },
+      _sum: { weight: true },
     });
 
     res.status(200).json({
@@ -81,36 +82,37 @@ const getDashboardData = async (req, res) => {
       pendingPickups,
       recyclingTrends,
       userGrowthTrends,
-      recentActivity: recentActivity.map(activity => ({
+      recentActivity: recentActivity.map((activity) => ({
         date: activity.createdAt,
-        description: `${activity.user.fullName} recycled ${activity.weight}kg of ${activity.itemType}`
+        description: `${activity.user.fullName} recycled ${activity.weight}kg of ${activity.itemType}`,
       })),
-      recyclingBreakdown
+      recyclingBreakdown,
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error fetching dashboard data", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching dashboard data", error: error.message });
   }
 };
 
 const getAllUsers = async (req, res) => {
   try {
-
     const sessionId = req.cookies.uid;
     if (!sessionId) return res.status(401).json({ message: "Unauthorized" });
 
     const user = await getUser(sessionId);
     if (!user) return res.status(401).json({ message: "Session expired" });
 
-    const { page = 1, limit = 10, search = '' } = req.query;
-    
+    const { page = 1, limit = 10, search = "" } = req.query;
+
     const users = await prisma.user.findMany({
       where: {
-        role: 'USER',
+        role: "USER",
         OR: [
           { fullName: { contains: search } },
-          { email: { contains: search } }
-        ]
+          { email: { contains: search } },
+        ],
       },
       select: {
         id: true,
@@ -122,22 +124,22 @@ const getAllUsers = async (req, res) => {
         _count: {
           select: {
             recycleItem: true,
-            pickupRequest: true
-          }
-        }
+            pickupRequest: true,
+          },
+        },
       },
       skip: (page - 1) * limit,
-      take: Number(limit)
+      take: Number(limit),
     });
 
     const total = await prisma.user.count({
       where: {
-        role: 'USER',
+        role: "USER",
         OR: [
           { fullName: { contains: search } },
-          { email: { contains: search } }
-        ]
-      }
+          { email: { contains: search } },
+        ],
+      },
     });
 
     res.status(200).json({
@@ -145,32 +147,33 @@ const getAllUsers = async (req, res) => {
       pagination: {
         currentPage: Number(page),
         totalPages: Math.ceil(total / limit),
-        totalUsers: total
-      }
+        totalUsers: total,
+      },
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error fetching users", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching users", error: error.message });
   }
 };
 
 const getUsersSubmissions = async (req, res) => {
   try {
-
     const sessionId = req.cookies.uid;
     if (!sessionId) return res.status(401).json({ message: "Unauthorized" });
 
     const user = await getUser(sessionId);
     if (!user) return res.status(401).json({ message: "Session expired" });
 
-    const { page = 1, limit = 10, status, search = '' } = req.query;
-    
+    const { page = 1, limit = 10, status, search = "" } = req.query;
+
     const whereCondition = {
       ...(status && { status }),
       OR: [
         { itemType: { contains: search } },
-        { user: { fullName: { contains: search } } }
-      ]
+        { user: { fullName: { contains: search } } },
+      ],
     };
 
     const submissions = await prisma.recycleItem.findMany({
@@ -179,13 +182,13 @@ const getUsersSubmissions = async (req, res) => {
         user: {
           select: {
             fullName: true,
-            email: true
-          }
-        }
+            email: true,
+          },
+        },
       },
       skip: (page - 1) * limit,
       take: Number(limit),
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: "desc" },
     });
 
     const total = await prisma.recycleItem.count({ where: whereCondition });
@@ -195,18 +198,20 @@ const getUsersSubmissions = async (req, res) => {
       pagination: {
         currentPage: Number(page),
         totalPages: Math.ceil(total / limit),
-        totalSubmissions: total
-      }
+        totalSubmissions: total,
+      },
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error fetching user submissions", error: error.message });
+    res.status(500).json({
+      message: "Error fetching user submissions",
+      error: error.message,
+    });
   }
 };
 
 const changeStatusOfSubmission = async (req, res) => {
   try {
-    
     const sessionId = req.cookies.uid;
     if (!sessionId) return res.status(401).json({ message: "Unauthorized" });
 
@@ -214,28 +219,30 @@ const changeStatusOfSubmission = async (req, res) => {
     if (!user) return res.status(401).json({ message: "Session expired" });
 
     const { submissionId, status } = req.body;
-    
+
     const updatedSubmission = await prisma.recycleItem.update({
       where: { id: submissionId },
-      data: { 
+      data: {
         status,
-        updatedAt: new Date()
-      }
+        updatedAt: new Date(),
+      },
     });
 
-    res.status(200).json({ 
-      message: "Submission status updated successfully", 
-      submission: updatedSubmission 
+    res.status(200).json({
+      message: "Submission status updated successfully",
+      submission: updatedSubmission,
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error updating submission status", error: error.message });
+    res.status(500).json({
+      message: "Error updating submission status",
+      error: error.message,
+    });
   }
 };
 
 const changeStatusOfPickUpRequest = async (req, res) => {
   try {
-    
     const sessionId = req.cookies.uid;
     if (!sessionId) return res.status(401).json({ message: "Unauthorized" });
 
@@ -243,22 +250,99 @@ const changeStatusOfPickUpRequest = async (req, res) => {
     if (!user) return res.status(401).json({ message: "Session expired" });
 
     const { pickupId, status } = req.body;
-    
+
     const updatedPickup = await prisma.pickupRequest.update({
       where: { id: pickupId },
-      data: { 
+      data: {
         status,
-        updatedAt: new Date()
-      }
+        updatedAt: new Date(),
+      },
     });
 
-    res.status(200).json({ 
-      message: "Pickup request status updated successfully", 
-      pickup: updatedPickup 
+    res.status(200).json({
+      message: "Pickup request status updated successfully",
+      pickup: updatedPickup,
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error updating pickup request status", error: error.message });
+    res.status(500).json({
+      message: "Error updating pickup request status",
+      error: error.message,
+    });
+  }
+};
+
+const getAdminDetails = async (req, res) => {
+  try {
+    const sessionId = req.cookies.uid;
+    if (!sessionId) return res.status(401).json({ message: "Unauthorized" });
+
+    const user = await getUser(sessionId);
+    if (!user) return res.status(401).json({ message: "Session expired" });
+
+    return res.status(200).json({ user });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
+const updateProfileData = async (req, res) => {
+  try {
+    const sessionId = req.cookies.uid;
+    if (!sessionId) return res.status(401).json({ message: "Unauthorized" });
+
+    const user = await getUser(sessionId);
+    if (!user) return res.status(401).json({ message: "Session expired" });
+
+    const { fullName, email } = req.body;
+
+    let uploadedImage = {};
+    if (req.file) {
+      // Validate file size
+      if (req.file.size > 2 * 1024 * 1024) {
+        return res.status(400).json({ message: "File size exceeds 2MB" });
+      }
+
+      try {
+        // Upload file buffer to Cloudinary
+        uploadedImage = await new Promise((resolve, reject) => {
+          const uploadStream = cloudinary.uploader.upload_stream(
+            { resource_type: "auto", public_id: `${Date.now()}` },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+            }
+          );
+
+          // Convert buffer to readable stream
+          const readableStream = Readable.from(req.file.buffer);
+          readableStream.pipe(uploadStream);
+        });
+      } catch (error) {
+        console.error("Error uploading image to Cloudinary:", error);
+        return res.status(500).json({ message: "Error uploading image" });
+      }
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        fullName,
+        email,
+        imageUrl: uploadedImage.secure_url || user.imageUrl,
+        imageId: uploadedImage.public_id || user.imageId,
+      },
+    });
+
+    return res
+      .status(200)
+      .json({ user: updatedUser, message: "Profile updated successfully" });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ message: "Server Error", error: error.message });
   }
 };
 
@@ -267,5 +351,7 @@ module.exports = {
   getAllUsers,
   getUsersSubmissions,
   changeStatusOfSubmission,
-  changeStatusOfPickUpRequest
+  changeStatusOfPickUpRequest,
+  getAdminDetails,
+  updateProfileData,
 };
