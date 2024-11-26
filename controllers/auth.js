@@ -1,7 +1,7 @@
 const prisma = require("../database/db.config");
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
-const { setUser } = require("../service/auth");
+const { setUser, removeUser } = require("../service/auth");
 
 const register = async (req, res) => {
   try {
@@ -78,7 +78,6 @@ const login = async (req, res) => {
         role: user.role,
       },
     });
-    
   } catch (error) {
     console.error(error);
     return res
@@ -87,7 +86,35 @@ const login = async (req, res) => {
   }
 };
 
+const logout = async (req, res) => {
+  try {
+    // Get the session ID from the cookie
+    const sessionId = req.cookies.uid;
+
+    if (!sessionId) {
+      return res.status(401).json({ message: "No active session" });
+    }
+
+    // Remove the session from the database
+    await removeUser(sessionId);
+
+    // Clear the session cookie
+    res.clearCookie("uid", {
+      httpOnly: true,
+    });
+
+    return res.status(200).json({ message: "Logout successful" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "An error occurred during logout. Please try again later.",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   register,
   login,
+  logout,
 };

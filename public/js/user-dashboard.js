@@ -101,10 +101,49 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (error) {
         console.error("Error fetching dashboard data:", error);
         // Optional: Show user-friendly error message
-        document.querySelector('.dashboard-content').innerHTML = `
-            <div class="error-message">
-                <p>Unable to load dashboard. Please try again later.</p>
-            </div>
-        `;
+        // document.querySelector('.dashboard-content').innerHTML = `
+        //     <div class="error-message">
+        //         <p>Unable to load dashboard. Please try again later.</p>
+        //     </div>
+        // `;
     }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const logoutLink = document.getElementById('logoutLink');
+    const profileLink = document.getElementById("profileLink");
+    
+    profileLink.addEventListener('click', async (e) => {
+        e.preventDefault();
+        window.location.href = '/pages/user-dashboard/profile-management.html';
+    });
+
+    logoutLink.addEventListener('click', async (e) => {
+        e.preventDefault(); // Prevent default link behavior
+        
+        try {
+            const response = await fetch('/api/auth/logout', {
+                method: 'POST',
+                credentials: 'include', // Important for sending cookies
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                // Redirect to login page or home page
+                window.location.href = '/pages/auth/index.html';
+            } else {
+                // Handle logout failure
+                const errorData = await response.json();
+                console.error('Logout failed:', errorData.message);
+                
+                // Optional: Show error message to user
+                alert(errorData.message || 'Logout failed. Please try again.');
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            alert('An unexpected error occurred. Please try again.');
+        }
+    });
 });

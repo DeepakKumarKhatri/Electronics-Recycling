@@ -36,7 +36,20 @@ async function getUser(sessionId) {
   return session.user;
 }
 
+async function removeUser(sessionId) {
+  try {
+    // Delete the session from the database
+    await prisma.session.delete({
+      where: { sessionId },
+    });
+  } catch (error) {
+    console.error("Error removing session:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   setUser,
   getUser,
+  removeUser,
 };
