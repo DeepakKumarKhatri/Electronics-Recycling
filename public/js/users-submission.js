@@ -216,31 +216,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.location.href = '/pages/user-dashboard/profile-management.html';
     });
 
-    // Sidebar toggle
-    const sidebar = document.getElementById('sidebar');
-    const sidebarToggle = document.getElementById('sidebarToggle');
-
-    sidebarToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('active');
-    });
-
-    // User dropdown
-    const userAvatar = document.getElementById('userAvatar');
-    const userDropdown = document.getElementById('userDropdown');
-
-    userAvatar.addEventListener('click', () => {
-        userDropdown.classList.toggle('show');
-    });
-
-    // Close dropdown when clicking outside
-    window.addEventListener('click', (e) => {
-        if (!e.target.matches('#userAvatar')) {
-            if (userDropdown.classList.contains('show')) {
-                userDropdown.classList.remove('show');
-            }
-        }
-    });
-
     // Initial load
     await fetchUserDetails();
     await loadSubmissions();

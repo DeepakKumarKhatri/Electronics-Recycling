@@ -37,31 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     alert("Profile updated successfully!");
   });
-
-  // Sidebar toggle functionality
-  const sidebar = document.getElementById("sidebar");
-  const sidebarToggle = document.getElementById("sidebarToggle");
-
-  sidebarToggle.addEventListener("click", () => {
-    sidebar.classList.toggle("active");
-  });
-
-  // User dropdown functionality
-  const userAvatar = document.getElementById("userAvatar");
-  const userDropdown = document.getElementById("userDropdown");
-
-  userAvatar.addEventListener("click", () => {
-    userDropdown.classList.toggle("show");
-  });
-
-  // Close the dropdown when clicking outside of it
-  window.addEventListener("click", (e) => {
-    if (!e.target.matches("#userAvatar")) {
-      if (userDropdown.classList.contains("show")) {
-        userDropdown.classList.remove("show");
-      }
-    }
-  });
 });
 
 profileForm.addEventListener("submit", async (e) => {
