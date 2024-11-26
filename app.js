@@ -9,8 +9,9 @@ var usersRouter = require("./routes/users");
 var authRouter = require("./routes/auth");
 var itemsRouter = require("./routes/items");
 var pickRequestsRouter = require("./routes/pickup_requests");
-const recycleHistoryRouter = require("./routes/recycle_history");
-const rewardsRouter = require("./routes/rewards");
+var recycleHistoryRouter = require("./routes/recycle_history");
+var rewardsRouter = require("./routes/rewards");
+var searchRouter = require("./routes/search");
 
 var app = express();
 
@@ -26,6 +27,7 @@ app.use("/api/items", itemsRouter);
 app.use("/api/pickup-requests", pickRequestsRouter);
 app.use("/api/recycle-history", recycleHistoryRouter);
 app.use("/api/rewards", rewardsRouter);
+app.use("/api/search", searchRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
