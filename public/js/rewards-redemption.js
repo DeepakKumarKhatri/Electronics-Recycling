@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const redeemItemPoints = document.getElementById('redeemItemPoints');
     const confirmRedeem = document.getElementById('confirmRedeem');
     const cancelRedeem = document.getElementById('cancelRedeem');
+    const consumedRewardsContainer = document.getElementById('consumedRewards');
 
     let userPoints = 0;
     let rewards = [];
@@ -127,7 +128,41 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    async function fetchConsumedRewards() {
+        try {
+            const response = await fetch('/api/rewards/consumed', { credentials: 'include' });
+            if (!response.ok) {
+                throw new Error('Failed to fetch consumed rewards');
+            }
+            const consumedRewards = await response.json();
+            displayConsumedRewards(consumedRewards);
+        } catch (error) {
+            console.error('Error fetching consumed rewards:', error);
+            alert('Failed to fetch consumed rewards. Please try refreshing the page.');
+        }
+    }
+
+    function displayConsumedRewards(consumedRewards) {
+        consumedRewardsContainer.innerHTML = '';
+        if (consumedRewards.length === 0) {
+            consumedRewardsContainer.innerHTML = '<p>No rewards consumed yet.</p>';
+            return;
+        }
+
+        consumedRewards.forEach(redemption => {
+            const rewardItem = document.createElement('div');
+            rewardItem.className = 'consumed-reward-item';
+            rewardItem.innerHTML = `
+                <img src="${redemption.reward.imageUrl}" alt="${redemption.reward.name}">
+                <h3>${redemption.reward.name}</h3>
+                <p>Redeemed on: ${new Date(redemption.createdAt).toLocaleDateString()}</p>
+            `;
+            consumedRewardsContainer.appendChild(rewardItem);
+        });
+    }
+
     // Initialize the page
     fetchUserPoints();
     fetchRewards();
+    fetchConsumedRewards();
 });

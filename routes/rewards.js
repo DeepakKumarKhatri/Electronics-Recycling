@@ -6,5 +6,6 @@ const rewardsController = require("../controllers/rewards");
 router.get("/", verifyUserSession, rewardsController.getRewards);
 router.get("/user-points", verifyUserSession, rewardsController.getUserPoints);
 router.post("/redeem", verifyUserSession, rewardsController.redeemReward);
+router.get("/consumed", verifyUserSession, rewardsController.getConsumedRewards);
 
 module.exports = router;

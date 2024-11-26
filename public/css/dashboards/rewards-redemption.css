@@ -136,3 +136,12 @@
         padding: 1.5rem;
     }
 }
+
+.item-management,#consumedRewards {
+    margin-top: 10px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}

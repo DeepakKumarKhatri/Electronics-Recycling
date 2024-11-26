@@ -35,7 +35,9 @@ const redeemReward = async (req, res) => {
     const user = await getUser(sessionId);
     if (!user) return res.status(401).json({ message: "Session expired" });
 
-    const reward = await prisma.reward.findUnique({ where: { id: parseInt(rewardId) } });
+    const reward = await prisma.reward.findUnique({
+      where: { id: parseInt(rewardId) },
+    });
     if (!reward) return res.status(404).json({ message: "Reward not found" });
 
     if (user.points < reward.points) {
@@ -55,11 +57,37 @@ const redeemReward = async (req, res) => {
       }),
     ]);
 
-    const updatedUser = await prisma.user.findUnique({ where: { id: user.id } });
-    res.json({ message: "Reward redeemed successfully", points: updatedUser.points });
+    const updatedUser = await prisma.user.findUnique({
+      where: { id: user.id },
+    });
+    res.json({
+      message: "Reward redeemed successfully",
+      points: updatedUser.points,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error redeeming reward" });
+  }
+};
+
+const getConsumedRewards = async (req, res) => {
+  try {
+    const sessionId = req.cookies.uid;
+    if (!sessionId) return res.status(401).json({ message: "Unauthorized" });
+
+    const user = await getUser(sessionId);
+    if (!user) return res.status(401).json({ message: "Session expired" });
+
+    const consumedRewards = await prisma.redemption.findMany({
+      where: { userId: user.id },
+      include: { reward: true },
+      orderBy: { createdAt: "desc" },
+    });
+
+    res.json(consumedRewards);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching consumed rewards" });
   }
 };
 
@@ -67,4 +95,5 @@ module.exports = {
   getRewards,
   getUserPoints,
   redeemReward,
+  getConsumedRewards,
 };
