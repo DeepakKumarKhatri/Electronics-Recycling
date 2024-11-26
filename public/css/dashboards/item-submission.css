@@ -128,13 +128,21 @@ button {
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
-    background-color: #007bff;
+    background-color: #5ad665;
     color: white;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #42e54f;
+}
+
+.delete-btn{
+    background-color: #FF4545;
+}
+
+.delete-btn:hover{
+    background-color: #FF2929;
 }
 
 /* Modal styles */

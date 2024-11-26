@@ -148,6 +148,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     } catch (error) {
         console.error("Error fetching dashboard data:", error);
-        alert("Failed to load dashboard data. Please try refreshing the page.");
+        // alert("Failed to load dashboard data. Please try refreshing the page.");
     }
 });
