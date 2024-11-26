@@ -79,3 +79,75 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error("Error fetching user details:", error);
     }
 });
+
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const response = await fetch('/api/dashboard', { credentials: 'include' });
+        if (!response.ok) throw new Error("Failed to fetch dashboard data");
+
+        const data = await response.json();
+
+        // Update summary cards
+        document.querySelector('.summary-card:nth-child(1) .summary-value').textContent = `${data.totalRecycled} kg`;
+        document.querySelector('.summary-card:nth-child(2) .summary-value').textContent = data.rewardPoints;
+        document.querySelector('.summary-card:nth-child(3) .summary-value').textContent = `${data.co2Saved.toFixed(2)} kg`;
+        document.querySelector('.summary-card:nth-child(4) .summary-value').textContent = data.nextPickup || 'No pickup scheduled';
+
+        // Recycling History Chart
+        const recyclingCtx = document.getElementById('recyclingChart').getContext('2d');
+        new Chart(recyclingCtx, {
+            type: 'line',
+            data: {
+                labels: data.recyclingHistory.map(item => new Date(item.createdAt).toLocaleDateString()),
+                datasets: [{
+                    label: 'Recycled (kg)',
+                    data: data.recyclingHistory.map(item => item._sum.weight),
+                    borderColor: '#2ecc71',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Recycling Breakdown Chart
+        const breakdownCtx = document.getElementById('breakdownChart').getContext('2d');
+        new Chart(breakdownCtx, {
+            type: 'doughnut',
+            data: {
+                labels: data.recyclingBreakdown.map(item => item.itemType),
+                datasets: [{
+                    data: data.recyclingBreakdown.map(item => item._sum.weight),
+                    backgroundColor: ['#3498db', '#e74c3c', '#f1c40f', '#95a5a6']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Update recent activity
+        const activityList = document.querySelector('.activity-list');
+        activityList.innerHTML = data.recentActivity.map(item => `
+            <li>
+                <span class="activity-date">${new Date(item.createdAt).toLocaleDateString()}</span>
+                <span class="activity-description">Recycled ${item.weight}kg of ${item.itemType}</span>
+            </li>
+        `).join('');
+
+    } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+        alert("Failed to load dashboard data. Please try refreshing the page.");
+    }
+});

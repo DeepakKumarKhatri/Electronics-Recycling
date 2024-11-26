@@ -12,6 +12,7 @@ var pickRequestsRouter = require("./routes/pickup_requests");
 var recycleHistoryRouter = require("./routes/recycle_history");
 var rewardsRouter = require("./routes/rewards");
 var searchRouter = require("./routes/search");
+var dashboardRouter = require("./routes/dashboard");
 
 var app = express();
 
@@ -28,6 +29,7 @@ app.use("/api/pickup-requests", pickRequestsRouter);
 app.use("/api/recycle-history", recycleHistoryRouter);
 app.use("/api/rewards", rewardsRouter);
 app.use("/api/search", searchRouter);
+app.use("/api/dashboard", dashboardRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
