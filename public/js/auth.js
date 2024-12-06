@@ -47,7 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify(loginData),
       });
       const data = await response.json();
-      console.log({data});
 
       if (data.message === "Successful") {
         if (data.user.role === "USER") {
@@ -94,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (data.message === "User Created") {
         alert("Account Created Successfully, Redirecting in 3 seconds...");
         setTimeout(() => {
-          window.location.href = "/pages/user-dashboard/index.html";
+          window.location.href = "/pages/auth/index.html";
         }, 3000); // 3 seconds delay
       } else {
         alert(data.message || "Registration failed.");

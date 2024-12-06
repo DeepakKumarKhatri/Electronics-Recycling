@@ -22,21 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
       reader.readAsDataURL(file);
     }
   });
-
-  // Handle form submission
-  profileForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    // Validate password fields
-    const newPassword = document.getElementById("newPassword").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
-
-    if (newPassword !== confirmPassword) {
-      alert("New password and confirm password do not match.");
-      return;
-    }
-    alert("Profile updated successfully!");
-  });
 });
 
 profileForm.addEventListener("submit", async (e) => {
@@ -45,9 +30,10 @@ profileForm.addEventListener("submit", async (e) => {
   const formData = new FormData();
   formData.append("fullName", document.getElementById("fullName").value);
   formData.append("email", document.getElementById("email").value);
+  formData.append("password", document.getElementById("password").value);
 
   if (imageUpload.files[0]) {
-    formData.append("image", imageUpload.files[0]); // Send as binary
+    formData.append("image", imageUpload.files[0]);
   }
 
   const response = await fetch("/api/admin/user-profile", {

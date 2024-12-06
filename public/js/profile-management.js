@@ -23,24 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Handle form submission
-  profileForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    // Validate password fields
-    const newPassword = document.getElementById("newPassword").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
-
-    if (newPassword !== confirmPassword) {
-      alert("New password and confirm password do not match.");
-      return;
-    }
-
-    // Here you would typically send the form data to your server
-    // For this example, we'll just show an alert
-    alert("Profile updated successfully!");
-  });
-
   // Sidebar toggle functionality
   const sidebar = document.getElementById("sidebar");
   const sidebarToggle = document.getElementById("sidebarToggle");
@@ -75,9 +57,10 @@ profileForm.addEventListener("submit", async (e) => {
   formData.append("email", document.getElementById("email").value);
   formData.append("phone_number", document.getElementById("phone").value);
   formData.append("address", document.getElementById("address").value);
+  formData.append("password", document.getElementById("password").value);
 
   if (imageUpload.files[0]) {
-    formData.append("image", imageUpload.files[0]); // Send as binary
+    formData.append("image", imageUpload.files[0]);
   }
 
   const response = await fetch("/api/users/user-profile", {

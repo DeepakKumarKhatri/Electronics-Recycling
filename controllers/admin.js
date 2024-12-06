@@ -2,6 +2,7 @@ const prisma = require("../database/db.config");
 const { getUser } = require("../service/auth");
 const cloudinary = require("../utils/cloudinary");
 const { Readable } = require("stream");
+const bcrypt = require("bcrypt");
 
 const getDashboardData = async (req, res) => {
   try {
@@ -295,7 +296,11 @@ const updateProfileData = async (req, res) => {
     const user = await getUser(sessionId);
     if (!user) return res.status(401).json({ message: "Session expired" });
 
-    const { fullName, email } = req.body;
+    const { fullName, email, password } = req.body;
+    const updateData = {
+      fullName,
+      email,
+    };
 
     let uploadedImage = {};
     if (req.file) {
@@ -318,6 +323,10 @@ const updateProfileData = async (req, res) => {
           // Convert buffer to readable stream
           const readableStream = Readable.from(req.file.buffer);
           readableStream.pipe(uploadStream);
+
+          // Add image details to update data
+          updateData.imageUrl = uploadedImage.secure_url || user.imageUrl;
+          updateData.imageId = uploadedImage.public_id || user.imageId;
         });
       } catch (error) {
         console.error("Error uploading image to Cloudinary:", error);
@@ -325,15 +334,20 @@ const updateProfileData = async (req, res) => {
       }
     }
 
+    // Only update password if it's provided in the request
+    if (password) {
+      // Validate password complexity if needed
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updateData.password = hashedPassword;
+    }
+
     const updatedUser = await prisma.user.update({
       where: { id: user.id },
-      data: {
-        fullName,
-        email,
-        imageUrl: uploadedImage.secure_url || user.imageUrl,
-        imageId: uploadedImage.public_id || user.imageId,
-      },
+      data: updateData,
     });
+
+    // Remove sensitive data before sending response
+    delete updatedUser.password;
 
     return res
       .status(200)
@@ -462,12 +476,12 @@ const getUserRecyclingPerformance = async (req, res) => {
         recycleItem: {
           where: { status: "APPROVED" },
           select: {
-            weight: true
-          }
-        }
+            weight: true,
+          },
+        },
       },
       skip: (page - 1) * limit,
-      take: Number(limit)
+      take: Number(limit),
     });
 
     // Transform user performance data with total weight calculation
@@ -477,16 +491,18 @@ const getUserRecyclingPerformance = async (req, res) => {
       email: user.email,
       points: user.points,
       totalItems: user.recycleItem.length,
-      totalWeight: user.recycleItem.reduce((sum, item) => sum + item.weight, 0)
+      totalWeight: user.recycleItem.reduce((sum, item) => sum + item.weight, 0),
     }));
 
-    // Sort the processed performance 
-    const sortedPerformance = processedPerformance.sort((a, b) => 
-      sortBy === "totalWeight" ? b.totalWeight - a.totalWeight : b.totalItems - a.totalItems
+    // Sort the processed performance
+    const sortedPerformance = processedPerformance.sort((a, b) =>
+      sortBy === "totalWeight"
+        ? b.totalWeight - a.totalWeight
+        : b.totalItems - a.totalItems
     );
 
     const totalUsers = await prisma.user.count({
-      where: { role: "USER" }
+      where: { role: "USER" },
     });
 
     res.status(200).json({
@@ -494,21 +510,20 @@ const getUserRecyclingPerformance = async (req, res) => {
       pagination: {
         currentPage: Number(page),
         totalPages: Math.ceil(totalUsers / limit),
-        totalUsers
-      }
+        totalUsers,
+      },
     });
   } catch (error) {
     console.error("Error fetching user recycling performance:", error);
     res.status(500).json({
       message: "Failed to fetch user recycling performance",
-      error: error.message
+      error: error.message,
     });
   }
 };
 
 const getEnvironmentalImpactReport = async (req, res) => {
   try {
-
     const sessionId = req.cookies.uid;
     if (!sessionId) return res.status(401).json({ message: "Unauthorized" });
 

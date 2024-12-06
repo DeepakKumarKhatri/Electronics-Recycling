@@ -1,3 +1,5 @@
+import { checkValidity } from "./utils/validityChecker.js";
+
 document.addEventListener('DOMContentLoaded', async () => {
     // Sidebar Toggle
     const sidebarToggle = document.getElementById('sidebarToggle');
@@ -32,6 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const { user } = await userResponse.json();
         const data = await dashboardResponse.json();
+        await checkValidity(user);
 
         // Update user info
         document.querySelector('.user-info span').textContent = `Welcome, ${user.fullName.split(" ")[0]}`;
